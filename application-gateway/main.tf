@@ -47,6 +47,7 @@ resource "azurerm_application_gateway" "appgw" {
     interval            = 30
     timeout             = 30
     unhealthy_threshold = 3
+    host = "localhost"
   }
 
   backend_http_settings {

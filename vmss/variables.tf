@@ -8,11 +8,11 @@ variable "admin_username" {}
 variable "ssh_public_key" {}
 
 variable "vm_size" {
-  default = "Standard_B2s"
+  default = "Standard_D2s_v3"
 }
 
 variable "instance_count" {
-  default = 2
+  default = 1
 }
 
 variable "tags" {
