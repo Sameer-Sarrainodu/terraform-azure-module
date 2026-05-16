@@ -18,6 +18,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
   for_each = var.vm_map
 
   name                = each.key
+  computer_name       = each.key
   resource_group_name = var.resource_group_name
   location            = var.location
   size                = each.value.size
