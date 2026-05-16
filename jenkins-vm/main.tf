@@ -52,11 +52,6 @@ source_image_reference {
   sku       = "9-lvm-gen2"
   version   = "latest"
 }
-custom_data = base64encode(
-  templatefile("${path.module}/jenkins-init.sh", {
-    private_key = file("~/.ssh/roboshop-azure")
-  })
-)
 
   disable_password_authentication = true
 
