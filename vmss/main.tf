@@ -12,12 +12,12 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
     public_key = var.ssh_public_key
   }
 
-  source_image_reference {
-    publisher = "Canonical"
-    offer     = "0001-com-ubuntu-server-jammy"
-    sku       = "22_04-lts-gen2"
-    version   = "latest"
-  }
+source_image_reference {
+  publisher = "RedHat"
+  offer     = "RHEL"
+  sku       = "9-lvm-gen2"
+  version   = "latest"
+}
 
   os_disk {
     caching              = "ReadWrite"
