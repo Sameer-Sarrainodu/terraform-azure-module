@@ -40,6 +40,7 @@ resource "azurerm_linux_virtual_machine" "vm" {
     username   = var.admin_username
     public_key = var.ssh_public_key
   }
+  custom_data = var.custom_data
 
   os_disk {
     caching              = "ReadWrite"
