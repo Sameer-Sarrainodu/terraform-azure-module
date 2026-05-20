@@ -1,25 +1,24 @@
-variable "name" {}
 variable "resource_group_name" {}
 variable "location" {}
-
-variable "subnet_id" {}
 
 variable "admin_username" {}
 variable "ssh_public_key" {}
 
-variable "vm_size" {
-  default = "Standard_D2s_v3"
+variable "backend_pool_map" {
+  type = map(list(string))
 }
 
-variable "instance_count" {
-  default = 1
+variable "vmss_map" {
+  description = "Map of VMSS services"
+
+  type = map(object({
+    subnet_id = string
+    vm_size   = string
+    instances = number
+  }))
 }
 
 variable "tags" {
   type    = map(string)
   default = {}
-}
-
-variable "backend_pool_ids" {
-  type = list(string)
 }

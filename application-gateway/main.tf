@@ -1,4 +1,7 @@
 resource "azurerm_public_ip" "appgw_pip" {
+
+  count = var.is_public ? 1 : 0
+
   name                = "${var.name}-pip"
   location            = var.location
   resource_group_name = var.resource_group_name
@@ -10,6 +13,7 @@ resource "azurerm_public_ip" "appgw_pip" {
 }
 
 resource "azurerm_application_gateway" "appgw" {
+
   name                = var.name
   location            = var.location
   resource_group_name = var.resource_group_name
@@ -31,11 +35,18 @@ resource "azurerm_application_gateway" "appgw" {
   }
 
   frontend_ip_configuration {
-    name                 = "frontend-ip"
-    public_ip_address_id = azurerm_public_ip.appgw_pip.id
+
+    name = "frontend-ip"
+
+    public_ip_address_id = var.is_public ? azurerm_public_ip.appgw_pip[0].id : null
+
+    private_ip_address_allocation = var.is_public ? null : "Static"
+
+    private_ip_address = var.is_public ? null : var.private_ip
+
+    subnet_id = var.subnet_id
   }
 
-  # ✅ keep backend pool empty (best practice)
   backend_address_pool {
     name = "backend-pool"
   }
@@ -47,7 +58,7 @@ resource "azurerm_application_gateway" "appgw" {
     interval            = 30
     timeout             = 30
     unhealthy_threshold = 3
-    host = "localhost"
+    host                = "localhost"
   }
 
   backend_http_settings {

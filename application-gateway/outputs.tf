@@ -2,8 +2,8 @@ output "appgw_id" {
   value = azurerm_application_gateway.appgw.id
 }
 
-output "public_ip" {
-  value = azurerm_public_ip.appgw_pip.ip_address
+output "frontend_ip" {
+  value = var.is_public ? azurerm_public_ip.appgw_pip[0].ip_address : var.private_ip
 }
 
 output "backend_pool_name" {

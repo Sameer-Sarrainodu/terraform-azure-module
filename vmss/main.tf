@@ -1,23 +1,31 @@
 resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
-  name                = var.name
+
+  for_each = var.vmss_map
+
+  name                = each.key
   resource_group_name = var.resource_group_name
   location            = var.location
 
-  sku                 = var.vm_size
-  instances           = var.instance_count
-  admin_username      = var.admin_username
+  sku       = each.value.vm_size
+  instances = each.value.instances
+
+  admin_username = var.admin_username
+
+  computer_name_prefix = each.key
+
+  disable_password_authentication = true
 
   admin_ssh_key {
     username   = var.admin_username
     public_key = var.ssh_public_key
   }
 
-source_image_reference {
-  publisher = "RedHat"
-  offer     = "RHEL"
-  sku       = "9-lvm-gen2"
-  version   = "latest"
-}
+  source_image_reference {
+    publisher = "RedHat"
+    offer     = "RHEL"
+    sku       = "9-lvm-gen2"
+    version   = "latest"
+  }
 
   os_disk {
     caching              = "ReadWrite"
@@ -25,19 +33,20 @@ source_image_reference {
   }
 
   network_interface {
-    name    = "vmss-nic"
+
+    name    = "${each.key}-nic"
     primary = true
 
     ip_configuration {
+
       name      = "internal"
       primary   = true
-      subnet_id = var.subnet_id
-      application_gateway_backend_address_pool_ids = var.backend_pool_ids
-
+      subnet_id = each.value.subnet_id
+      application_gateway_backend_address_pool_ids = var.backend_pool_map[each.key]
     }
   }
 
-  upgrade_mode = "Automatic"
+  upgrade_mode = "Rolling"
 
   tags = var.tags
 }
