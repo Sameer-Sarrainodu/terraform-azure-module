@@ -20,12 +20,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
     public_key = var.ssh_public_key
   }
 
-  source_image_reference {
-    publisher = "RedHat"
-    offer     = "RHEL"
-    sku       = "9-lvm-gen2"
-    version   = "latest"
-  }
+source_image_id = each.value.image_id
 
   os_disk {
     caching              = "ReadWrite"
@@ -46,7 +41,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
     }
   }
 
-  upgrade_mode = "Rolling"
+  upgrade_mode = "Manual"
 
   tags = var.tags
 }

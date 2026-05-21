@@ -18,11 +18,11 @@ resource "azurerm_application_gateway" "appgw" {
   location            = var.location
   resource_group_name = var.resource_group_name
 
-  sku {
-    name     = "Standard_v2"
-    tier     = "Standard_v2"
-    capacity = 1
-  }
+sku {
+  name     = "Standard_v2"
+  tier     = "Standard_v2"
+  capacity = 1
+}
 
   gateway_ip_configuration {
     name      = "appgw-ip-config"
@@ -34,18 +34,16 @@ resource "azurerm_application_gateway" "appgw" {
     port = 80
   }
 
-  frontend_ip_configuration {
+frontend_ip_configuration {
 
-    name = "frontend-ip"
+  name = "frontend-ip"
 
-    public_ip_address_id = var.is_public ? azurerm_public_ip.appgw_pip[0].id : null
+  public_ip_address_id = var.is_public ? azurerm_public_ip.appgw_pip[0].id : null
 
-    private_ip_address_allocation = var.is_public ? null : "Static"
+  private_ip_address_allocation = var.is_public ? null : "Static"
 
-    private_ip_address = var.is_public ? null : var.private_ip
-
-    subnet_id = var.subnet_id
-  }
+  private_ip_address = var.is_public ? null : var.private_ip
+}
 
   backend_address_pool {
     name = "backend-pool"
